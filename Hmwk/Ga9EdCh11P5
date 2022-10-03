@@ -1,0 +1,82 @@
+/* 
+ * File:   Gaddis Chapter 11 Problem 5
+ * Author: Alejandro Porter
+ * Created on: September 14, 2022
+ * Purpose:  using the enumerated type to step through the elements of the array.
+ */
+
+//System Libraries
+#include <iostream>
+using namespace std;
+
+//User Libraries
+
+//Global Constants - No Global Variables
+//Only Universal Constants, Math, Physics, Conversions, Higher Dimensions
+
+//Function Prototypes
+//enumerated data type 
+enum Month {JANUARY,FEBRUARY,MARCH,APRIL,MAY,JUNE,JULY,AUGUST,SEPTEMBER,OCTOBER,NOVEMBER,DECEMBER};
+//Execution Begins Here
+int main(int argc, char** argv) {
+    //Set Random Number seed
+    
+    //Declare Variable Data Types and Constants
+    const int SIZE=12;
+    float tr[SIZE];
+    float ht[SIZE];
+    float lt[SIZE];
+    
+    float sum=0;
+    float avg=0;
+    float tsum=0;
+    float tavg=0;
+    //Initialize Variables
+    
+    //Process or map Inputs to Outputs
+    
+    //Display Outputs
+    for(int i = JANUARY;i<=JUNE;i++){
+        cout<<"Enter the total rainfall for the month:";
+        cin>>tr[i];
+        cout<<endl;
+        cout<<"Enter the high temp:";
+        cin>>ht[i];
+        cout<<endl;
+        cout<<"Enter the low temp:";
+        cin>>lt[i];
+        cout<<endl;
+    }
+    //Calculate average monthly rainfall 
+    // First Find sum of all array elements
+    for(int i = JANUARY; i <=JUNE; i++) {
+        sum += tr[i];
+    }
+    avg = sum / JULY;
+    cout<<"Average monthly rainfall:"<<avg<<endl;
+    //calculate Average temp
+    for(int i = JANUARY; i <=JUNE; i++) {
+        tsum = tsum + ht[i]+lt[i];
+    }
+    tavg = tsum / 12;
+    //calcualte Highest temp
+    for(int i = JANUARY;i <= JUNE; ++i) {
+        // Change < to > if you want to find the smallest element
+        if(ht[0] < ht[i]){
+            ht[0] = ht[i];
+        }
+    }
+    cout<<"High Temp:"<<ht[0]<<endl;
+    //calculate Lowest temp
+    for(int i = JANUARY;i <= JUNE; ++i) {
+        // Change < to > if you want to find the smallest element
+        if(lt[0] > lt[i]){
+            lt[0] = lt[i];
+        }
+    }
+    cout<<"Low Temp:"<<lt[0]<<endl;
+    
+    cout<<"Average Temp:"<<tavg;
+    //Exit stage right!
+    return 0;
+}
