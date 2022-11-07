@@ -1,0 +1,274 @@
+/* 
+ * File:   main.cpp
+ * Author: Alejandro Porter
+ * Created on Oct 24, 2022, 10:22 AM
+ * Purpose: Project 1 - CandyLand Version 1
+ */
+
+//System Libraries - ALL HAVE TO BE USED
+#include <iostream> //input output library--used
+#include <iomanip>  //format library--------used
+#include <cmath>    //math library----------used
+#include <cstdlib>  //rand function---------used
+#include <fstream>  //File Input------------used
+#include <string>   //string library--------used
+#include <ctime>    //srand-----------------used
+using namespace std;
+
+//User Libraries
+//Global Constants - NO GLOBAL VARIABLES
+
+const short int VICT=85;        //Victory Condition
+const int SIZE=7;               //Size of shortcut phrases array
+//Function Prototypes
+int drwCrd();                   //Draw random card
+void pturn();                   //Process/Display Player Turn
+void dsplyhd();                 //Display Heading
+int search(int arr[], int n, int x);
+
+//Execution begins here
+int main(int argc, char** argv) {
+    //Initialize the Random Number Seed
+    srand(time(NULL));
+    //Declare Variables - NO DOUBLES - 7 CHARACTERS
+    string begin;           //To start the game
+    string p1pawn,          //Player 1 Pawn color
+           p2pawn;          //Player 2 Pawn color
+    string *ptr1 = nullptr;
+    string *ptr2 = nullptr;
+    ptr1 = &p1pawn;
+    ptr2 = &p2pawn;
+    
+    int color1,             //How user will input pawn color 1
+        color2;             //How user will input pawn color 2
+    //Initialize Variables 
+    //Display Heading
+    dsplyhd();
+    cin>>begin;
+    //INPUT VALIDATION
+    if(begin=="Exit"){
+        cout<<"Now Exiting Program...";
+        exit(0);
+    }
+    //START GAME
+    else if(begin=="Begin"){
+        //PLAYERS CHOOSE PAWN COLORS
+        cout<<"Player 1, Choose a Pawn Color (1 for Red, 2 for Blue)\n";
+        cin>>color1;
+        switch(color1){
+            case 1:p1pawn="Red";break;
+            case 2:p1pawn="Blue";break;
+        }
+        cout<<"Player 2, Choose a Pawn Color (1 for Red, 2 for Blue)\n";
+        cin>>color2;
+        switch(color2){
+            case 1:p2pawn="Red";break;
+            case 2:p2pawn="Blue";break;
+        }
+        cout<<"\nPlayer 1 - "<<*ptr1<<" Pawn";
+        cout<<"\nPlayer 2 - "<<*ptr2<<" Pawn\n";
+        //INPUT VALIDATION
+        if(p1pawn==p2pawn){ //Both Players Choose Same Color(number)
+            cout<<"Both players cannot be the same color! Run the program again.\n";
+            exit(0);
+        }
+        //Process Player turns and display player turns
+        pturn();
+        
+    }
+    //Exit Stage Right
+    return 0;
+
+}
+//Search Array function
+int search(int arr[], int n, int x){
+    for (int i=0;i<n;i++)
+        if(arr[i]==x)
+            return i;
+    return -1;
+}
+//Draw Random Card function
+int drwCrd(){
+    return rand() % 5 + 1;
+}
+
+//Display Heading Function
+void dsplyhd(){
+    cout<<"-----  ---  \\     | |\\  \\     /  |      ---  \\     | |\\ "<<endl;
+    cout<<"|     |   | |\\    | | \\  \\   /   |     |   | |\\    | | \\ "<<endl;
+    cout<<"|     |   | | \\   | |  \\  \\ /    |     |   | | \\   | |  \\ "<<endl;
+    cout<<"|     |---| |  \\  | |  /   |     |     |---| |  \\  | |  / "<<endl;
+    cout<<"|     |   | |   \\ | | /    |     |     |   | |   \\ | | / "<<endl;
+    cout<<"|____ |   | |    \\| |/     |     |____ |   | |    \\| |/ "<<endl;
+    cout<<"Welcome to the game of Candyland"<<endl;
+    //PROMPT USER TO PRESS ENTER TO START GAME
+    cout<<"\nObjective: Be the first player to reach the Candy Castle by "
+            "making it to end of the path.\n\n";
+    cout<<"Contents: 1 Colorful Gameboard with 85 linear spaces\n";
+    cout<<setw(40)<<"2 Gingerbread Character Pawns\n";
+    cout<<setw(33)<<"64 Cards Numbered 1-5\n\n";
+    cout<<"Game Rules: Draw a card from the deck. The number on the card is how many spaces you move forward.\n";
+    cout<<setw(83)<<"If you land on a shortcut tile, you will move forward even more tiles.\n";
+    cout<<setw(68)<<"The First Player to Reach the last tile to win the game!\n\n";
+    cout<<"Type 'Begin' to begin your journey or 'Exit' to leave the game.\n";
+    
+}
+void pturn(){
+    
+    //PLAYER ONE
+    string shrtct1[SIZE]={"You Reached Rainbow Trail: go to 40",
+                         "You Encounter Lord Licorice: 9 to 24",
+                         "You Discover Gumdrop Pass: 32 to 43", 
+                         "You Chat With Mr. Mint: 46 to 58", 
+                         "You see Queen Frostine: 62 to 73",
+                         "You find a magic candy bar: 3 to 9"};  //Shortcut Description for player 1
+    string swords1; //shortcut phrase to display
+    char draw;      //How player 1 will draw card
+    int move=0,     //Total moves player 1 has undergone
+        card=0,       //card that player 1 draws
+        newsqr=0,   //new square that player 1 travels to
+        prvsqr=0,   //Player 1's current square
+        scsqr=0;      //New square dictated by possible shortcut
+    
+    //PLAYER TWO
+    string shrtct2[SIZE]={"You Reached Rainbow Trail: go to 40",
+                          "You Encounter Lord Licorice: 9 to 24",
+                          "You Discover Gumdrop Pass: 32 to 43", 
+                          "You Chat With Mr. Mint: 46 to 58", 
+                          "You see Queen Frostine: 62 to 73",
+                          "You find a magic candy bar: 3 to 9"};
+    string swords2;//Shortcut phrases for player 2
+    string p2pawn;  //How player 2 will draw card
+    int move2=0,    //Total moves player 2 has undergone
+        card2=0,      //card that player 2 draws
+        newsqr2=0,  //new square that player 2 travels to
+        prvsqr2=0,  //Player 2's current square
+        scsqr2=0;     //New square dictated by possible shortcut
+    do{
+        //ASK USER TO DRAW CARD
+        cout<<"Enter 'd' to draw a card for each player.\n";
+        cin>>draw;
+        //PLAYER 1
+        move+=1;            //adds one to total moves
+        card=drwCrd();    //randomly generates card with value 1-5
+        newsqr=prvsqr+card; //New square=previous square + card drawn
+        //SHORTCUTS THAT CAN BE ENCOUNTERED
+        if(newsqr==7||newsqr==8){
+            swords1=shrtct1[0];
+            scsqr=40;
+        }
+        else if(newsqr==9){
+            swords1=shrtct1[1];
+            scsqr=24;
+        }
+        else if(newsqr==32){
+            swords1=shrtct1[2];
+            scsqr=43;
+        }
+        else if(newsqr==46){
+            swords1=shrtct1[3];
+            scsqr=58;
+        }
+        else if(newsqr==62){
+            swords1=shrtct1[4];
+            scsqr=73;
+        }
+        else if(newsqr==3){
+            swords1=shrtct1[5];
+            scsqr=pow(newsqr,2);        //NewSquare^2
+        }
+        cout<<"\nPlayer 1";
+        cout<<"\n---------------------------------------------------------------------------------------------------";
+        cout<<"\nMove # - Card Drawn(1-5) - Current Position - New Position - shortcut Tile Reached(if any)\n";
+        cout<<"---------------------------------------------------------------------------------------------------\n";
+        cout<<setw(3)<<move<<setw(12)<<card<<setw(18)<<prvsqr<<setw(19)<<newsqr<<setw(45)<<swords1;
+        cout<<"\n---------------------------------------------------------------------------------------------------\n";
+       
+        if(swords1!=""){     //if shortcut encountered, previous value is shortcut square value
+           prvsqr=scsqr;
+        }
+        else{
+            prvsqr=newsqr;  //else, previous square is just the new square the player travels to
+        }
+        swords1="";          //Resets shrtct to nothing after previous move is processed
+        if(newsqr>=VICT){   //If New suare is greater than or equal to the victory condition
+            cout<<"Player One Wins!\n";
+            cout<<"Victory Candy!\n";
+            for(int i=0; i<VICT; i++){
+                cout<<">0<"<<" ";
+            }
+            int arr[SIZE]={1,2,3};
+            int n = sizeof(arr)/sizeof(arr[0]);
+            int x=drwCrd();
+            int index=search(arr, n, x);
+            if(index==-1)
+                cout<<"\nNo Lottery Reward!\n";
+            else
+                cout<<"\nLottery Won! Element found at position "<<index<<endl;
+            break;
+        }
+        
+        //PLAYER 2
+        move2+=1;               //adds one to total moves
+        card2=drwCrd();       //randomly generates card with value 1-5
+        newsqr2=prvsqr2+card2;  //New square=previous square + card drawn
+        //POSSIBLE SHORTCUTS FOR PLAYER 2
+        if(newsqr2==7||newsqr2==8){
+            swords2=shrtct2[0];
+            scsqr2=40;
+        }
+        else if(newsqr2==9){
+            swords2=shrtct2[1];
+            scsqr2=24;
+        }
+        else if(newsqr2==32){
+            swords2=shrtct2[2];
+            scsqr2=43;
+        }
+        else if(newsqr2==46){
+            swords2=shrtct2[3];
+            scsqr2=58;
+        }
+        else if(newsqr2==62){
+            swords2=shrtct2[4];
+            scsqr2=73;
+        }
+        else if(newsqr2==3){
+            swords2=shrtct2[5];
+            scsqr2=pow(newsqr2,2);
+        }
+        cout<<"\nPlayer 2";
+        cout<<"\n---------------------------------------------------------------------------------------------------";
+        cout<<"\nMove # - Card Drawn(1-5) - Current Position - New Position - shortcut Tile Reached(if any)\n";
+        cout<<"---------------------------------------------------------------------------------------------------\n";
+        cout<<setw(3)<<move2<<setw(12)<<card2<<setw(18)<<prvsqr2<<setw(19)<<newsqr2<<setw(45)<<swords2;
+        cout<<"\n---------------------------------------------------------------------------------------------------\n\n";
+        if(swords2!=""){    //if shortcut encountered, previous value is shortcut square value
+        prvsqr2=scsqr2;     
+        }
+        else{
+        prvsqr2=newsqr2;    //else, previous square is just the new square the player travels to
+        }
+        swords2="";
+        if(newsqr2>=VICT){  ////If New suare is greater than or equal to the victory condition
+            cout<<"Player Two Wins!\n";
+            cout<<"Victory Candy!\n";
+            for(int i=0; i<VICT; i++){
+                cout<<">0<"<<" ";
+            }
+            int arr[SIZE]={1,2,3};
+            int n = sizeof(arr)/sizeof(arr[0]);
+            int x=drwCrd();
+            int index=search(arr, n, x);
+            if(index==-1)
+                cout<<"\nNo Lottery Reward!\n";
+            else
+                cout<<"\nLottery Won! Element found at position "<<index<<endl;
+            break;
+        }
+        void lottery();
+    }
+    while(draw=='d');{ 
+    }
+    return;
+}
